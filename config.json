@@ -1,0 +1,7 @@
+{
+    "path":  "D:/Datasets/ABEM/WSOD/Covid/Crops/", 
+    "format": ".tif", 
+    "save_to": "../Logging/",
+    "randomize": "False",
+    "start_idx": 0
+}
