@@ -46,7 +46,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
         os.makedirs(self.labeled_data_dir,exist_ok=True)
 
     def closeEvent(self, e):
-        if((self.curr_idx < len(self.paths))):
+        if((self.curr_idx < len(self.paths)) and (len(self.img.rectangles)>0)):
             # save last label and timing
             self.end = timer()
             elapsed = self.end - self.start_timer
