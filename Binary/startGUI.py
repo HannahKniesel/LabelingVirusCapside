@@ -232,10 +232,10 @@ if(start_idx != 0):
         print("WARNING::Labeling is being continued in folder: "+str(save_to))
         existing_files = glob(save_to+"/*.pkl")
         if(len(existing_files)<start_idx):
-            print("WARNING::start_idx is greater than number of existing files. Continue with start_idx="+str(len(existing_files)))
+            print("WARNING::start_idx is greater than number of existing files. Continue with start_idx="+str(len(existing_files)-1))
             start_idx = len(existing_files)
         elif(len(existing_files)>start_idx):
-            print("WARNING::start_idx is smaller than number of existing files. Continue with start_idx="+str(len(existing_files)))
+            print("WARNING::start_idx is smaller than number of existing files. Continue with start_idx="+str(len(existing_files)-1))
             start_idx = len(existing_files)
 
     else:
@@ -247,9 +247,9 @@ else:
         os.makedirs(save_to, exist_ok = False)
     except: 
         print("ERROR::Save directory already exists. Use different save_to directory in config.json file.")
-        existing_files = glob(save_to+"/Labeled/*.pkl")
+        existing_files = glob(save_to+"/*.pkl")
         if(len(existing_files)<len(paths)):
-            print("If you wish to continue labeling in this folder please set the start_idx to: "+str(len(existing_files)))
+            print("If you wish to continue labeling in this folder please set the start_idx to: "+str(len(existing_files)-1))
         exit()
 
 
