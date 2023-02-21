@@ -3,5 +3,5 @@
     "format": ".tif", 
     "save_to": "../Logging/",
     "randomize": "False",
-    "start_idx": 0
+    "start_idx": 3
 }

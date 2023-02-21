@@ -28,7 +28,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
         self.setupUi(self)
         self.paths = paths
         self.save_to = save_to
-        self.curr_idx = start_idx 
+        self.curr_idx = np.max([0,start_idx-1])
         self.started = False
         self.elapsed = 0
         self.start_timer = 0
