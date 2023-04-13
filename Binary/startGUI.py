@@ -56,7 +56,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
             self.loading.setText("saving data...")
             print("Save idx: "+str(self.curr_idx))
             self.loading.repaint()
-            save_as_pickle([self.crop, self.label, self.bb_labels, self.elapsed + elapsed], self.labeled_data_dir+"/"+str(self.curr_idx))
+            save_as_pickle([self.crop, self.label, self.bb_labels, self.elapsed + elapsed, self.pixelsize], self.labeled_data_dir+"/"+str(self.curr_idx))
             self.curr_idx +=1
             # self.curr_idx = np.argwhere(self.labels != -1).max() +1
 
@@ -91,7 +91,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
         if(self.training_period):
             if(idx < len(self.training_imgs)):
                 print(idx)
-                self.crop, pixmap, self.bb_labels = load_data(self.training_imgs[idx], pixmap_size = (IMG_SIZE,IMG_SIZE))
+                self.crop, pixmap, self.bb_labels, self.pixelsize = load_data(self.training_imgs[idx], idx, pixmap_size = (IMG_SIZE,IMG_SIZE))
                 self.img.setPixmap(pixmap)
                 return
             else: 
@@ -102,7 +102,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
             self.close()
             return
         else:
-            self.crop, pixmap, self.bb_labels = load_data(self.paths[idx], pixmap_size = (IMG_SIZE,IMG_SIZE))
+            self.crop, pixmap, self.bb_labels, self.pixelsize = load_data(self.paths[idx], idx, pixmap_size = (IMG_SIZE,IMG_SIZE))
         self.img.setPixmap(pixmap)     
 
 
@@ -143,7 +143,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
             print("Save idx: "+str(self.curr_idx))
             self.loading.repaint()
             if(not self.training_period):
-                save_as_pickle([self.crop, self.label, self.bb_labels, self.elapsed + elapsed], self.labeled_data_dir+"/"+str(self.curr_idx))
+                save_as_pickle([self.crop, self.label, self.bb_labels, self.elapsed + elapsed, self.pixelsize], self.labeled_data_dir+"/"+str(self.curr_idx))
             self.curr_idx += 1 
             # self.btn_prev.setEnabled(True)
             self.set_image(self.curr_idx)
@@ -181,7 +181,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
             self.loading.repaint()
             # self.timings[self.curr_idx] += elapsed
             print("Save idx: "+str(self.curr_idx))
-            save_as_pickle([self.crop, self.label, self.bb_labels, self.elapsed + elapsed], self.labeled_data_dir+"/"+str(self.curr_idx))
+            save_as_pickle([self.crop, self.label, self.bb_labels, self.elapsed + elapsed, self.pixelsize], self.labeled_data_dir+"/"+str(self.curr_idx))
             self.loading.setText("")
             self.loading.repaint()
             

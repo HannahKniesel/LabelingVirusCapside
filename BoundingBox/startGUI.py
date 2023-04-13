@@ -59,7 +59,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
                 xmin,ymin,xmax,ymax = rect.getCoords()
                 rect_coords.append([xmin/IMG_SIZE,ymin/IMG_SIZE,xmax/IMG_SIZE,ymax/IMG_SIZE])
             print("Saved num rects: "+str(len(rect_coords)))
-            save_as_pickle([self.crop, rect_coords, self.bb_labels, self.elapsed + elapsed], self.labeled_data_dir+"/"+str(self.curr_idx))
+            save_as_pickle([self.crop, rect_coords, self.bb_labels, self.elapsed + elapsed, self.pixelsize], self.labeled_data_dir+"/"+str(self.curr_idx))
             self.curr_idx +=1
 
         num_finished = len(glob(self.labeled_data_dir+"/*.pkl"))
@@ -84,7 +84,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
         if(self.training_period):
             if(idx < len(self.training_imgs)):
                 print(idx)
-                self.crop, pixmap, self.bb_labels = load_data(self.training_imgs[idx], pixmap_size = (IMG_SIZE,IMG_SIZE))
+                self.crop, pixmap, self.bb_labels, self.pixelsize = load_data(self.training_imgs[idx], idx, pixmap_size = (IMG_SIZE,IMG_SIZE))
                 self.img.setPixmap(pixmap)
                 print("Set pixmap")
                 return
@@ -97,7 +97,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
             self.close()
             return
         else:
-            self.crop, pixmap, self.bb_labels = load_data(self.paths[idx], pixmap_size = (IMG_SIZE,IMG_SIZE))
+            self.crop, pixmap, self.bb_labels, self.pixelsize = load_data(self.paths[idx], idx, pixmap_size = (IMG_SIZE,IMG_SIZE))
         self.img.setPixmap(pixmap)    
 
     def connect_handlers(self):
@@ -135,7 +135,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
             xmin,ymin,xmax,ymax = rect.getCoords()
             rect_coords.append([xmin/IMG_SIZE,ymin/IMG_SIZE,xmax/IMG_SIZE,ymax/IMG_SIZE])
         if(not self.training_period):
-            save_as_pickle([self.crop, rect_coords, self.bb_labels, self.elapsed + elapsed], self.labeled_data_dir+"/"+str(self.curr_idx))
+            save_as_pickle([self.crop, rect_coords, self.bb_labels, self.elapsed + elapsed, self.pixelsize], self.labeled_data_dir+"/"+str(self.curr_idx))
 
         # setup for new image
         self.curr_idx += 1 
@@ -180,7 +180,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
             xmin,ymin,xmax,ymax = rect.getCoords()
             rect_coords.append([xmin/IMG_SIZE,ymin/IMG_SIZE,xmax/IMG_SIZE,ymax/IMG_SIZE])
         print("Saved num rects: "+str(len(rect_coords)))
-        save_as_pickle([self.crop, rect_coords, self.bb_labels, self.elapsed + elapsed], self.labeled_data_dir+"/"+str(self.curr_idx))
+        save_as_pickle([self.crop, rect_coords, self.bb_labels, self.elapsed + elapsed, self.pixelsize], self.labeled_data_dir+"/"+str(self.curr_idx))
         self.loading.setText("")
         self.loading.repaint()
 
