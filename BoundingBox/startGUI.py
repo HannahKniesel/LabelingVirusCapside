@@ -228,6 +228,8 @@ save_to = data['save_to']+"/"+Path(path).stem+"/BoundingBox/"
 start_idx = data['start_idx']
 
 paths = glob(path+"*"+file_format)
+if(data['deterministic'] == "True"):
+    np.random.seed(42)
 if(data['randomize'] == "True"): 
     paths = np.random.permutation(paths)
     

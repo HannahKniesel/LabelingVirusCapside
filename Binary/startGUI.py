@@ -220,8 +220,11 @@ save_to = data['save_to']+"/"+Path(path).stem+"/BinaryLabels/"
 start_idx = data['start_idx']
 
 paths = glob(path+"*"+file_format)
+if(data['deterministic'] == "True"):
+    np.random.seed(42)
 if(data['randomize'] == "True"): 
     paths = np.random.permutation(paths)
+
 
 if(len(paths) == 0):
     print("ERROR::Could not find files in specified directory '"+path+"*"+file_format)

@@ -1,0 +1,8 @@
+{
+    "path":  "D:/Datasets/ABEM/WSOD/SARS-CoV-2/Crops/", 
+    "format": ".pkl", 
+    "save_to": "../Covid_Laue/Test/",
+    "randomize": "False",
+    "deterministic": "True",
+    "start_idx": 0
+}

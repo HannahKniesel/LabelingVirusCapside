@@ -1,0 +1,8 @@
+{
+    "path":  "D:/Datasets/ABEM/WSOD/Covid/Crops2/", 
+    "format": ".pkl", 
+    "save_to": "../Covid_Bergner/Test/",
+    "randomize": "False",
+    "deterministic": "True",
+    "start_idx": 0
+}
