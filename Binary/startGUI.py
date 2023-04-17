@@ -84,8 +84,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
                 if(e.key() == Qt.Key_Return):
                     self.start()
             if(((e.key() == Qt.Key_Backspace) or (e.key() == Qt.Key_Left)) and self.curr_idx>0):
-                # self.prev()
-                pass
+                self.prev()
+                # pass
        
     def set_image(self, idx):
         if(self.training_period):
@@ -149,7 +149,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
             self.set_image(self.curr_idx)
             self.label_currnum.setText(str(self.curr_idx+1)+"/"+str(len(self.paths)))
             try:
-                _, self.label, self.bb_labels, self.elapsed = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
+                _, self.label, self.bb_labels, self.elapsed, self.pixelsize = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
             except: 
                 self.label = -1
                 self.elapsed = 0
@@ -192,10 +192,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
         self.label_currnum.setText(str(self.curr_idx+1)+"/"+str(len(self.paths)))
 
         try:
-            _, self.label, self.bb_labels, self.elapsed = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
+            print("Open: "+str(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl"))
+            _, self.label, self.bb_labels, self.elapsed, self.pixelsize = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
         except: 
             self.label = -1
             self.elapsed = 0
+
+        print(self.label)
 
         if(self.label == 0):
             self.frame.setStyleSheet("background-color: red;")

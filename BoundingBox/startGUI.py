@@ -76,8 +76,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
             elif(e.key() == Qt.Key_Return):
                 self.start()
         if(((e.key() == Qt.Key_Backspace) or (e.key() == Qt.Key_Left)) and (self.curr_idx < len(self.paths)) and (self.curr_idx >= 0)):
-            # self.prev()
-            pass
+            self.prev()
+            # pass
         
         
     def set_image(self, idx):
@@ -145,7 +145,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
 
         # probably load previous data
         try:
-            _, rect_coords,_, self.elapsed = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
+            _, rect_coords,_, self.elapsed, self.pixelsize = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
             self.img.rectangles = []
             for coords in rect_coords:
                 top_left = QtCore.QPoint(int(coords[0]*IMG_SIZE), int(coords[1]*IMG_SIZE))
@@ -168,49 +168,50 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
        
 
     def prev(self):
-        self.end = timer()
-        elapsed = self.end - self.start_timer
-        self.loading.setText("saving data...")
-        self.loading.repaint()
+        if(self.curr_idx>0):
+            self.end = timer()
+            elapsed = self.end - self.start_timer
+            self.loading.setText("saving data...")
+            self.loading.repaint()
 
-        # save current annotations
-        print("Save idx: "+str(self.curr_idx))
-        rect_coords = []
-        for rect in self.img.rectangles: 
-            xmin,ymin,xmax,ymax = rect.getCoords()
-            rect_coords.append([xmin/IMG_SIZE,ymin/IMG_SIZE,xmax/IMG_SIZE,ymax/IMG_SIZE])
-        print("Saved num rects: "+str(len(rect_coords)))
-        save_as_pickle([self.crop, rect_coords, self.bb_labels, self.elapsed + elapsed, self.pixelsize], self.labeled_data_dir+"/"+str(self.curr_idx))
-        self.loading.setText("")
-        self.loading.repaint()
+            # save current annotations
+            print("Save idx: "+str(self.curr_idx))
+            rect_coords = []
+            for rect in self.img.rectangles: 
+                xmin,ymin,xmax,ymax = rect.getCoords()
+                rect_coords.append([xmin/IMG_SIZE,ymin/IMG_SIZE,xmax/IMG_SIZE,ymax/IMG_SIZE])
+            print("Saved num rects: "+str(len(rect_coords)))
+            save_as_pickle([self.crop, rect_coords, self.bb_labels, self.elapsed + elapsed, self.pixelsize], self.labeled_data_dir+"/"+str(self.curr_idx))
+            self.loading.setText("")
+            self.loading.repaint()
 
-        # setup for new image
-        self.curr_idx -= 1
-        # if(self.curr_idx == 0):
-            # self.btn_prev.setEnabled(False)
-        self.set_image(self.curr_idx)
-        self.label_currnum.setText(str(self.curr_idx+1)+"/"+str(len(self.paths)))
+            # setup for new image
+            self.curr_idx -= 1
+            # if(self.curr_idx == 0):
+                # self.btn_prev.setEnabled(False)
+            self.set_image(self.curr_idx)
+            self.label_currnum.setText(str(self.curr_idx+1)+"/"+str(len(self.paths)))
 
-        # probably load previousely annotated data
-        try:
-            self.img.rectangles = []
-            _, rect_coords,_,self.elapsed = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
-            for coords in rect_coords:
-                top_left = QtCore.QPoint(int(coords[0]*IMG_SIZE), int(coords[1]*IMG_SIZE))
-                bottom_right = QtCore.QPoint(int(coords[2]*IMG_SIZE), int(coords[3]*IMG_SIZE))
-                self.img.rectangles.append(QtCore.QRect(top_left, bottom_right).normalized())
+            # probably load previousely annotated data
+            try:
+                self.img.rectangles = []
+                _, rect_coords,_,self.elapsed, self.pixelsize = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
+                for coords in rect_coords:
+                    top_left = QtCore.QPoint(int(coords[0]*IMG_SIZE), int(coords[1]*IMG_SIZE))
+                    bottom_right = QtCore.QPoint(int(coords[2]*IMG_SIZE), int(coords[3]*IMG_SIZE))
+                    self.img.rectangles.append(QtCore.QRect(top_left, bottom_right).normalized())
+                
+                # TODO load rectangles at position
+                if(len(self.img.rectangles) == 0):
+                    self.frame.setStyleSheet("background-color: red;")
+                elif(len(self.img.rectangles) >= 1):
+                    self.frame.setStyleSheet("background-color: green;")
+            except:
+                self.img.rectangles = []
+                self.elapsed = 0
+                self.frame.setStyleSheet("background-color: yellow;")
             
-            # TODO load rectangles at position
-            if(len(self.img.rectangles) == 0):
-                self.frame.setStyleSheet("background-color: red;")
-            elif(len(self.img.rectangles) >= 1):
-                self.frame.setStyleSheet("background-color: green;")
-        except:
-            self.img.rectangles = []
-            self.elapsed = 0
-            self.frame.setStyleSheet("background-color: yellow;")
-        
-        self.start_timer = timer()
+            self.start_timer = timer()
 
 
 app = QtWidgets.QApplication(sys.argv)

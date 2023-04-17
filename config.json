@@ -1,7 +1,8 @@
 {
-    "path":  "D:/Datasets/ABEM/WSOD/Covid/Crops/", 
-    "format": ".tif", 
-    "save_to": "../Logging/",
+    "path":  "D:/Datasets/ABEM/WSOD/Covid/Covid_Bergner/", 
+    "format": ".pkl", 
+    "save_to": "../Test/",
     "randomize": "False",
-    "start_idx": 0
+    "deterministic": "True",
+    "start_idx": 3
 }

@@ -81,8 +81,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
             elif(e.key() == Qt.Key_Return):
                 self.start()
         if(((e.key() == Qt.Key_Backspace) or (e.key() == Qt.Key_Left)) and (self.curr_idx < len(self.paths)) and (self.curr_idx >= 0)):
-            # self.prev()
-            pass
+            self.prev()
+            # pass
         
         
     def set_image(self, idx):
@@ -153,7 +153,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
 
         # probably load previous data
         try:
-            _, point_coords,_,self.elapsed = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
+            _, point_coords,_,self.elapsed, self.pixelsize = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
             self.img.points = []
             for point in point_coords: 
                 p =  QtCore.QPoint(int(point[0]*IMG_SIZE), int(point[1]*IMG_SIZE))
@@ -175,47 +175,49 @@ class MainWindow(QtWidgets.QMainWindow, Ui_BinaryLabeling):
        
 
     def prev(self):
-        self.end = timer()
-        elapsed = self.end - self.start_timer
-        self.loading.setText("saving data...")
-        self.loading.repaint()
-        # self.timings[self.curr_idx] += elapsed
+        if(self.curr_idx>0):
 
-        # save current annotations
-        print("Save idx: "+str(self.curr_idx))
-        point_coords = []
-        for point in self.img.points: 
-            point_coords.append([point.x()/IMG_SIZE, point.y()/IMG_SIZE])
-        print("Saved num points: "+str(len(point_coords)))
-        save_as_pickle([self.crop, point_coords, self.bb_labels, self.elapsed + elapsed, self.pixelsize], self.labeled_data_dir+"/"+str(self.curr_idx))
-        self.loading.setText("")
-        self.loading.repaint()
+            self.end = timer()
+            elapsed = self.end - self.start_timer
+            self.loading.setText("saving data...")
+            self.loading.repaint()
+            # self.timings[self.curr_idx] += elapsed
 
-        # setup for new image
-        self.curr_idx -= 1
-        # if(self.curr_idx == 0):
-            # self.btn_prev.setEnabled(False)
-        self.set_image(self.curr_idx)
-        self.label_currnum.setText(str(self.curr_idx+1)+"/"+str(len(self.paths)))
+            # save current annotations
+            print("Save idx: "+str(self.curr_idx))
+            point_coords = []
+            for point in self.img.points: 
+                point_coords.append([point.x()/IMG_SIZE, point.y()/IMG_SIZE])
+            print("Saved num points: "+str(len(point_coords)))
+            save_as_pickle([self.crop, point_coords, self.bb_labels, self.elapsed + elapsed, self.pixelsize], self.labeled_data_dir+"/"+str(self.curr_idx))
+            self.loading.setText("")
+            self.loading.repaint()
 
-        # probably load previousely annotated data
-        try:
-            _, point_coords,_,self.elapsed = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
-            self.img.points = []
-            for point in point_coords: 
-                p =  QtCore.QPoint(int(point[0]*IMG_SIZE), int(point[1]*IMG_SIZE))
-                self.img.points.append(p)
+            # setup for new image
+            self.curr_idx -= 1
+            # if(self.curr_idx == 0):
+                # self.btn_prev.setEnabled(False)
+            self.set_image(self.curr_idx)
+            self.label_currnum.setText(str(self.curr_idx+1)+"/"+str(len(self.paths)))
+
+            # probably load previousely annotated data
+            try:
+                _, point_coords,_,self.elapsed, self.pixelsize = read_pickle(self.labeled_data_dir+"/"+str(self.curr_idx)+".pkl")
+                self.img.points = []
+                for point in point_coords: 
+                    p =  QtCore.QPoint(int(point[0]*IMG_SIZE), int(point[1]*IMG_SIZE))
+                    self.img.points.append(p)
+                
+                if(len(self.img.points) == 0):
+                    self.frame.setStyleSheet("background-color: red;")
+                elif(len(self.img.points) >= 1):
+                    self.frame.setStyleSheet("background-color: green;")
+            except:
+                self.elapsed = 0
+                self.img.points = []
+                self.frame.setStyleSheet("background-color: yellow;")
             
-            if(len(self.img.points) == 0):
-                self.frame.setStyleSheet("background-color: red;")
-            elif(len(self.img.points) >= 1):
-                self.frame.setStyleSheet("background-color: green;")
-        except:
-            self.elapsed = 0
-            self.img.points = []
-            self.frame.setStyleSheet("background-color: yellow;")
-        
-        self.start_timer = timer()
+            self.start_timer = timer()
 
 
 app = QtWidgets.QApplication(sys.argv)
