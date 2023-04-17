@@ -29,7 +29,7 @@ class Ui_BinaryLabeling(object):
       
         
         self.label_currnum = QtWidgets.QLabel(BinaryLabeling)
-        self.label_currnum.setGeometry(QtCore.QRect(600, 690, 47, 13))
+        self.label_currnum.setGeometry(QtCore.QRect(600, 690, 147, 13))
         self.label_currnum.setAlignment(QtCore.Qt.AlignCenter)
         self.label_currnum.setObjectName("label_currnum")
         

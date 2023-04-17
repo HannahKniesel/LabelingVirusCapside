@@ -30,7 +30,7 @@ class Ui_BinaryLabeling(object):
         self.btn_no.setGeometry(QtCore.QRect(830, 680, 93, 28))
         self.btn_no.setObjectName("btn_no")"""
         self.label_currnum = QtWidgets.QLabel(BinaryLabeling)
-        self.label_currnum.setGeometry(QtCore.QRect(600, 690, 47, 13))
+        self.label_currnum.setGeometry(QtCore.QRect(600, 690, 147, 13))
         self.label_currnum.setAlignment(QtCore.Qt.AlignCenter)
         self.label_currnum.setObjectName("label_currnum")
         """self.btn_next = QtWidgets.QPushButton(BinaryLabeling)

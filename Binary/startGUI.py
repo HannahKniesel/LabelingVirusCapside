@@ -238,11 +238,11 @@ if(start_idx != 0):
         print("WARNING::Labeling is being continued in folder: "+str(save_to))
         existing_files = glob(save_to+"/*.pkl")
         if(len(existing_files)<start_idx):
-            print("WARNING::start_idx is greater than number of existing files. Continue with start_idx="+str(len(existing_files)-1))
-            start_idx = len(existing_files)
+            print("WARNING::start_idx is greater than number of existing files") #. Continue with start_idx="+str(len(existing_files)-1))
+            # start_idx = len(existing_files)
         elif(len(existing_files)>start_idx):
-            print("WARNING::start_idx is smaller than number of existing files. Continue with start_idx="+str(len(existing_files)-1))
-            start_idx = len(existing_files)
+            print("WARNING::start_idx is smaller than number of existing files") #. Continue with start_idx="+str(len(existing_files)-1))
+            # start_idx = len(existing_files)
 
     else:
         print("ERROR::Could not find labeling folder, but start_idx > 0")
