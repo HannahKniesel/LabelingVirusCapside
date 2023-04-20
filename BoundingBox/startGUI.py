@@ -250,8 +250,8 @@ if(start_idx != 0):
             # start_idx = len(existing_files)
 
     else:
-        print("ERROR::Could not find labeling folder, but start_idx > 0")
-        exit()
+        print("WARNING::Could not find labeling folder, but start_idx > 0")
+        # exit()
     os.makedirs(save_to, exist_ok = True)
 else:
     try:
